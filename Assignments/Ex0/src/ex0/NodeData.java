@@ -57,6 +57,7 @@ public class NodeData implements node_data {
     public void removeNode(node_data node) {
         if(siblingNodesIds.contains(node.getKey())) {
             siblingNodes.remove(node);
+            siblingNodesIds.remove(node.getKey());
         }
     }
 

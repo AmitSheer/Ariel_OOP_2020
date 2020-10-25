@@ -166,35 +166,26 @@ public class Graph_Ex0_Test2 {
      */
     public static void test_n(int size, int edge, int seed, int tt, int jump) {
         graph g = graph_creator(size, edge, seed);
-        System.out.println(g);
+        //System.out.println(g);
         graph_algorithms ga = new Graph_Algo();
         ga.init(g);
-        node_data[] nodes = nodes(g);
         int i=0;
         boolean b = true;
-        b = ga.isConnected();
-        //while(i<=tt) {
-        //  b &= ga.isConnected();
-        //  for(int x=0;x<jump;x++) {
-        //      int s = g.nodeSize();
-        //      int r = nextRnd(0, s);
-        //      g.removeNode(r);
-        //  }
-        //  System.out.println(""+i+") "+g.nodeSize()+"  con: "+b);
-        //  i++;
-        //}
-        g.removeNode(52);
-        g.removeNode(55);
-        g.removeNode(42);
-        g.removeNode(368);
-        g.removeNode(705);
-        g.removeNode(961);
-        g.removeNode(231);
-        g.removeNode(135);
-        g.removeNode(361);
-        g.removeNode(490);
+        while(i<=tt) {
+          b &= ga.isConnected();
+          for(int x=0;x<jump;x++) {
+              int s = g.nodeSize();
+              int r = nextRnd(0, s);
+              //System.out.println(r);
+              g.removeNode(r);
+              System.out.println("Removed node: "+r);
+          }
+          System.out.println(""+i+") "+g.nodeSize()+"  con: "+b);
+          i++;
+        }
         System.out.println(g);
-       test("test_n(a) ",b, true);
+
+        test("test_n(a) ",b, true);
         b = ga.isConnected();
         test("test_n(b) ",b, false);
     }

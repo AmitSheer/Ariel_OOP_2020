@@ -48,10 +48,11 @@ public class Graph_Algo implements graph_algorithms{
         try {
             node = graphCopy.getV().stream().findFirst().get();
             surfAllConnectedNodes(node);
-            Collection<node_data> nodes = graphCopy.getV();
-            for (node_data n :
-                    nodes) {
-                if(n.getTag()<0) return false;
+            for (node_data n : graphCopy.getV()) {
+                if(n.getTag()<0){
+                    System.out.println("not connected node: "+n.getKey());
+                    return false;
+                }
             }
         }catch (Exception e ) {
             System.out.println("Empty Graph");
@@ -77,22 +78,22 @@ public class Graph_Algo implements graph_algorithms{
 
     @Override
     public int shortestPathDist(int src, int dest) {
-        node_data node = graph.getV().stream().findFirst().get();
-        Queue<node_data> nodeDataQueue = new LinkedList<>();
-        nodeDataQueue.add(node);
-        ArrayList<Integer> nodeIdList = new ArrayList<>();
-        while(!nodeDataQueue.isEmpty()){
-            node = nodeDataQueue.remove();
-            nodeIdList.add(node.getKey());
-            for (node_data n: node.getNi()) {
-                if(!nodeIdList.contains(n.getKey())) {
-                    nodeDataQueue.add(n);
-                }
-            }
-        }
+        //node_data node = graph.getV().stream().findFirst().get();
+        //Queue<node_data> nodeDataQueue = new LinkedList<>();
+        //nodeDataQueue.add(node);
+        //ArrayList<Integer> nodeIdList = new ArrayList<>();
+        //while(!nodeDataQueue.isEmpty()){
+        //    node = nodeDataQueue.remove();
+        //    nodeIdList.add(node.getKey());
+        //    for (node_data n: node.getNi()) {
+        //        if(!nodeIdList.contains(n.getKey())) {
+        //            nodeDataQueue.add(n);
+        //        }
+        //    }
+        //}
         graph copiedGraph = copy();
         try {
-            //surfAllConnectedNodes(copiedGraph.getNode(src));
+            surfAllConnectedNodes(copiedGraph.getNode(src));
             return copiedGraph.getNode(dest).getTag();
         }catch(Exception e){
             return -1;
@@ -104,7 +105,7 @@ public class Graph_Algo implements graph_algorithms{
         graph copiedGraph = copy();
         List<node_data> pathToDest = new ArrayList<>();
         try{
-            //surfAllConnectedNodes(copiedGraph.getNode(src));
+            surfAllConnectedNodes(copiedGraph.getNode(src));
             pathToDest.add(copiedGraph.getNode(dest));
             if(pathToDest.get(0).getTag()==-1) return pathToDest;
             for (int i = 0; i < copiedGraph.getNode(dest).getTag(); i++) {

@@ -7,6 +7,7 @@ public class Graph_DS implements graph{
     private Hashtable<Integer, HashSet<Integer>> edges;
     private Integer edgeSize;
     private HashSet<node_data> v;
+    private int numberOfChanges;
     //V,E
 
     public Graph_DS(){
@@ -14,6 +15,7 @@ public class Graph_DS implements graph{
         edges = new Hashtable<>();
         v= new HashSet<>();
         edgeSize=0;
+        numberOfChanges=0;
     }
 
     @Override
@@ -32,17 +34,19 @@ public class Graph_DS implements graph{
             nodes.putIfAbsent(n.getKey(), n);
             v.add(n);
             edges.putIfAbsent(n.getKey(),new HashSet<>());
+            numberOfChanges++;
         }
     }
 
     @Override
     public void connect(int node1, int node2) {
-        if(nodes.containsKey(node1)&& nodes.containsKey(node2)&&!edges.get(node1).contains(node2)&&!edges.get(node2).contains(node1)&&node1!=node2){
+        if(nodes.containsKey(node1)&& nodes.containsKey(node2)&&!nodes.get(node1).hasNi(node2)&&!nodes.get(node2).hasNi(node1)&&node1!=node2){
             edges.get(node1).add(node2);
             edges.get(node2).add(node1);
             nodes.get(node1).addNi(nodes.get(node2));
             nodes.get(node2).addNi(nodes.get(node1));
             edgeSize++;
+            numberOfChanges++;
         }
     }
 
@@ -70,6 +74,7 @@ public class Graph_DS implements graph{
         }
         nodes.remove(key);
         edges.remove(key);
+        numberOfChanges++;
         return node;
     }
 
@@ -82,6 +87,7 @@ public class Graph_DS implements graph{
             nodes.get(node1).removeNode(nodes.get(node2));
             nodes.get(node2).removeNode(nodes.get(node1));
             edgeSize--;
+            numberOfChanges++;
         }
         }catch (NullPointerException e){
 
@@ -100,7 +106,7 @@ public class Graph_DS implements graph{
 
     @Override
     public int getMC() {
-        return 0;
+        return numberOfChanges;
     }
 
     @Override
