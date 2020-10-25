@@ -7,8 +7,6 @@ public class Graph_DS implements graph{
     private Hashtable<Integer, HashSet<Integer>> edges;
     private Integer edgeSize;
     private HashSet<node_data> v;
-    private Integer idCounter;
-
     //V,E
 
     public Graph_DS(){
@@ -35,7 +33,6 @@ public class Graph_DS implements graph{
             v.add(n);
             edges.putIfAbsent(n.getKey(),new HashSet<>());
         }
-
     }
 
     @Override

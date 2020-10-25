@@ -12,6 +12,8 @@ public class NodeData implements node_data {
 
     public NodeData(){
         siblingNodes = new HashSet<>();
+        siblingNodes = new HashSet<>();
+        siblingNodesIds = new HashSet<>();
         this.tag=-1;
     }
 

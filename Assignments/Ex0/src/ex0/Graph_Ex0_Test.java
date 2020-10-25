@@ -4,6 +4,8 @@ package ex0;
  *
  */
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -11,16 +13,17 @@ public class Graph_Ex0_Test {
     static int seed = 31;
     static Random _rnd = new Random(seed);
     static int v_size = 10;
-    static int e_size = v_size*3;
+    static int e_size = v_size*2;
     static graph g0 = new Graph_DS(), g1;
-    static graph_algorithms ga;
+    static Graph_Algo ga;
     public static void main(String[] args) {
         test1();
         System.out.println(g0);
-        test2();
+       // test2();
         System.out.println(g0);
         test3();
         System.out.println(g0);
+        test4();
     }
     public static void test1() {
 
@@ -59,6 +62,20 @@ public class Graph_Ex0_Test {
         for (int i=0;i<sp.size();i++) {
             System.out.println(" "+sp.get(i));
         }
+    }
+
+    public static void test4() {
+        ga = new Graph_Algo();
+        ga.init(g0);
+        g1 = ga.copy();
+        ga.init(g1);
+        System.out.println(LocalDateTime.now());
+        ga.copy();
+        System.out.println(LocalDateTime.now());
+        g1.removeNode(3);
+        g1.removeNode(8);
+        boolean isConnected = ga.isConnected();
+        System.out.println(isConnected);
     }
     public static int nextRnd(int min, int max) {
         double v = nextRnd(0.0+min, (double)max);
