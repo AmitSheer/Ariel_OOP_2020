@@ -30,41 +30,26 @@ public class Graph_Algo implements graph_algorithms{
     @Override
     public boolean isConnected() {
         if(graph.getV().size()==0) return true;
-        node_data node = graph.getV().stream().findFirst().get();
-        Queue<node_data> nodeDataQueue = new LinkedList<>();
-        nodeDataQueue.add(node);
-        ArrayList<Integer> nodeIdList = new ArrayList<>();
-        while(!nodeDataQueue.isEmpty()){
-            node = nodeDataQueue.remove();
-            nodeIdList.add(node.getKey());
-            for (node_data n: node.getNi()) {
-                if(!nodeIdList.contains(n.getKey())) {
-                    nodeDataQueue.add(n);
-                }
-            }
+        node_data node;
+        graph graphCopy = copy();
+        int nodeCounter = 0;
+        try {
+            node = graphCopy.getV().stream().findFirst().get();
+            nodeCounter = surfAllConnectedNodes(node, nodeCounter);
+        }catch (Exception e ) {
+            System.out.println("Empty Graph");
         }
-        return nodeIdList.size() == graph.nodeSize();
-        //graph graphCopy = copy();
-        //try {
-        //    node = graphCopy.getV().stream().findFirst().get();
-        //    surfAllConnectedNodes(node);
-        //    for (node_data n: graphCopy.getV()) {
-        //        if (n.getTag()==-1) return false;
-        //    }
-        //    return true;
-        //}catch (Exception e ) {
-        //    System.out.println("Empty Graph");
-        //    return true;
-        //}
+        return nodeCounter== graph.nodeSize();
     }
 
-    private void surfAllConnectedNodes(node_data node) throws NullPointerException{
+    private int surfAllConnectedNodes(node_data node,int nodeCounter) throws NullPointerException{
         Queue<node_data> nodeDataQueue = new LinkedList<>();
         nodeDataQueue.add(node);
-        if (node.getTag() > -1) return;
+        if (node.getTag() > -1) return 0;
         node.setTag(0);
         while(!nodeDataQueue.isEmpty()){
             node = nodeDataQueue.remove();
+            nodeCounter++;
             for (node_data n: node.getNi()) {
                 if(n.getTag()<0) {
                     n.setTag(node.getTag() + 1);
@@ -72,6 +57,7 @@ public class Graph_Algo implements graph_algorithms{
                 }
             }
         }
+        return nodeCounter;
     }
 
     @Override
@@ -91,7 +77,7 @@ public class Graph_Algo implements graph_algorithms{
         }
         graph copiedGraph = copy();
         try {
-            surfAllConnectedNodes(copiedGraph.getNode(src));
+            //surfAllConnectedNodes(copiedGraph.getNode(src));
             return copiedGraph.getNode(dest).getTag();
         }catch(Exception e){
             return -1;
@@ -103,7 +89,7 @@ public class Graph_Algo implements graph_algorithms{
         graph copiedGraph = copy();
         List<node_data> pathToDest = new ArrayList<>();
         try{
-            surfAllConnectedNodes(copiedGraph.getNode(src));
+            //surfAllConnectedNodes(copiedGraph.getNode(src));
             pathToDest.add(copiedGraph.getNode(dest));
             if(pathToDest.get(0).getTag()==-1) return pathToDest;
             for (int i = 0; i < copiedGraph.getNode(dest).getTag(); i++) {

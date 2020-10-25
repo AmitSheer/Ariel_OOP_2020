@@ -25,7 +25,7 @@ public class Graph_Ex0_Test {
     public static void test1() {
 
         for(int i=0;i<v_size;i++) {
-            node_data n = new NodeData();
+            node_data n = new NodeData(i,""+i);
             g0.addNode(n);
         }
         while(g0.edgeSize() < e_size) {
@@ -44,7 +44,8 @@ public class Graph_Ex0_Test {
         g0.removeNode(8);
     }
     public static void test3() {
-        ga = new Graph_Algo(g0);
+        ga = new Graph_Algo();
+        ga.init(g0);
         g1 = ga.copy();
         ga.init(g1);
         boolean isConnected = ga.isConnected();

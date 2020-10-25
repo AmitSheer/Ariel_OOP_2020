@@ -7,6 +7,7 @@ public class Graph_DS implements graph{
     private Hashtable<Integer, HashSet<Integer>> edges;
     private Integer edgeSize;
     private HashSet<node_data> v;
+    private Integer idCounter;
 
     //V,E
 
@@ -39,7 +40,7 @@ public class Graph_DS implements graph{
 
     @Override
     public void connect(int node1, int node2) {
-        if(nodes.containsKey(node1)&& nodes.containsKey(node2)&&!edges.get(node1).contains(node2)&&!edges.get(node2).contains(node1)){
+        if(nodes.containsKey(node1)&& nodes.containsKey(node2)&&!edges.get(node1).contains(node2)&&!edges.get(node2).contains(node1)&&node1!=node2){
             edges.get(node1).add(node2);
             edges.get(node2).add(node1);
             nodes.get(node1).addNi(nodes.get(node2));

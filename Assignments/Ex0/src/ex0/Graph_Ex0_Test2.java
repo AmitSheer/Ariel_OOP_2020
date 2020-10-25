@@ -79,7 +79,7 @@ public class Graph_Ex0_Test2 {
         graph g = new Graph_DS();
         _rnd = new Random(seed);
         for(int i=0;i<v_size;i++) {
-            node_data n = new NodeData();
+            node_data n = new NodeData(i,""+i);
             g.addNode(n);
         }
         // Iterator<node_data> itr = V.iterator(); // Iterator is a more elegant and generic way, but KIS is more important
@@ -169,7 +169,7 @@ public class Graph_Ex0_Test2 {
      */
     public static void test_n(int size, int edge, int seed, int tt, int jump) {
         graph g = graph_creator(size, edge, seed);
-      //  System.out.println(g);
+        System.out.println(g);
         graph_algorithms ga = new Graph_Algo();
         ga.init(g);
         node_data[] nodes = nodes(g);
