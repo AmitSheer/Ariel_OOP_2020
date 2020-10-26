@@ -223,6 +223,9 @@ public class Graph_Ex0_Test2 {
         dist = ga.shortestPathDist(nodes[0].getKey(), nodes[size-1].getKey());
         test("test_connectivity1 ",dist, size/2);
         g.removeNode(ind+1);
+        g.removeNode(23);
+        g.removeNode(27);
+        System.out.println(g);
         dist = ga.shortestPathDist(nodes[0].getKey(), nodes[size-1].getKey());
         test("test_connectivity2 ",dist, -1);
     }
