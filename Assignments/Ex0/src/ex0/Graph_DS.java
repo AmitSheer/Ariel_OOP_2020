@@ -10,6 +10,7 @@ public class Graph_DS implements graph{
     private int numberOfChanges;
     //V,E
 
+
     public Graph_DS(){
         nodes = new HashMap<>();
         edges = new Hashtable<>();
@@ -25,7 +26,7 @@ public class Graph_DS implements graph{
 
     @Override
     public boolean hasEdge(int node1, int node2) {
-        return edges.get(node1).contains(node1);
+        return nodes.get(node1).hasNi(node2);
     }
 
     @Override
@@ -33,7 +34,6 @@ public class Graph_DS implements graph{
         if(!nodes.containsKey(n.getKey())){
             nodes.putIfAbsent(n.getKey(), n);
             v.add(n);
-            edges.putIfAbsent(n.getKey(),new HashSet<>());
             numberOfChanges++;
         }
     }
@@ -41,8 +41,6 @@ public class Graph_DS implements graph{
     @Override
     public void connect(int node1, int node2) {
         if(nodes.containsKey(node1)&& nodes.containsKey(node2)&&!nodes.get(node1).hasNi(node2)&&!nodes.get(node2).hasNi(node1)&&node1!=node2){
-            edges.get(node1).add(node2);
-            edges.get(node2).add(node1);
             nodes.get(node1).addNi(nodes.get(node2));
             nodes.get(node2).addNi(nodes.get(node1));
             edgeSize++;
@@ -68,12 +66,11 @@ public class Graph_DS implements graph{
         node_data node = nodes.get(key);
         if(node == null) return null;
         v.remove(node);
-        while(edges.get(key).size()>0){
-            int node_key = edges.get(key).stream().findFirst().get();
+        while(nodes.get(key).getNi().size()>0){
+            int node_key = nodes.get(key).getNi().stream().findFirst().get().getKey();
             removeEdge(node_key,key);
         }
         nodes.remove(key);
-        edges.remove(key);
         numberOfChanges++;
         return node;
     }
@@ -81,9 +78,7 @@ public class Graph_DS implements graph{
     @Override
     public void removeEdge(int node1, int node2) {
         try{
-        if(edges.get(node1).contains(node2)||edges.get(node2).contains(node1)){
-            edges.get(node1).remove(node2);
-            edges.get(node2).remove(node1);
+        if(nodes.get(node1).hasNi(node2)||nodes.get(node2).hasNi(node1)){
             nodes.get(node1).removeNode(nodes.get(node2));
             nodes.get(node2).removeNode(nodes.get(node1));
             edgeSize--;
@@ -113,7 +108,6 @@ public class Graph_DS implements graph{
     public String toString() {
         return "Graph_DS{" +
                 "nodes=" + nodes +
-                ", edges=" + edges +
                 ", edgeSize=" + edgeSize +
                 ", v=" + v +
                 '}';

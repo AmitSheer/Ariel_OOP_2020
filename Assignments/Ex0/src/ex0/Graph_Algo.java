@@ -78,19 +78,6 @@ public class Graph_Algo implements graph_algorithms{
 
     @Override
     public int shortestPathDist(int src, int dest) {
-        //node_data node = graph.getV().stream().findFirst().get();
-        //Queue<node_data> nodeDataQueue = new LinkedList<>();
-        //nodeDataQueue.add(node);
-        //ArrayList<Integer> nodeIdList = new ArrayList<>();
-        //while(!nodeDataQueue.isEmpty()){
-        //    node = nodeDataQueue.remove();
-        //    nodeIdList.add(node.getKey());
-        //    for (node_data n: node.getNi()) {
-        //        if(!nodeIdList.contains(n.getKey())) {
-        //            nodeDataQueue.add(n);
-        //        }
-        //    }
-        //}
         graph copiedGraph = copy();
         try {
             surfAllConnectedNodes(copiedGraph.getNode(src));

@@ -179,6 +179,7 @@ public class Graph_Ex0_Test2 {
         graph g = graph_creator(size, edge, seed);
         graph_algorithms ga = new Graph_Algo();
         ga.init(g);
+        node_data[] nodes = nodes(g);
         int i=0;
         boolean b = true;
         while(i<tt) {
@@ -192,7 +193,7 @@ public class Graph_Ex0_Test2 {
         //  System.out.println(""+i+") "+g.nodeSize()+"  con: "+b);
           i++;
         }
-        System.out.println(g);
+       // System.out.println(g);
 
         test("test_n(a) ",b, true);
         b = ga.isConnected();
@@ -223,8 +224,6 @@ public class Graph_Ex0_Test2 {
         dist = ga.shortestPathDist(nodes[0].getKey(), nodes[size-1].getKey());
         test("test_connectivity1 ",dist, size/2);
         g.removeNode(ind+1);
-        g.removeNode(23);
-        g.removeNode(27);
         System.out.println(g);
         dist = ga.shortestPathDist(nodes[0].getKey(), nodes[size-1].getKey());
         test("test_connectivity2 ",dist, -1);
