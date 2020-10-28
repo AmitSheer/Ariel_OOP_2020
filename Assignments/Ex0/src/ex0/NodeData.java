@@ -23,6 +23,7 @@ public class NodeData implements node_data {
 
     public NodeData(node_data node){
         this.key = node.getKey();
+        nodeCounter=nodeCounter+node.getKey();
         this.tag=-1;
     }
 
@@ -32,6 +33,7 @@ public class NodeData implements node_data {
         siblingNodesIds = new HashSet<>();
         this.info = info;
         this.tag=-1;
+        nodeCounter=nodeCounter+key;
     }
 
     @Override
