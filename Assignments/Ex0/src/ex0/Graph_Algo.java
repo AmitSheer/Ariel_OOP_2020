@@ -10,12 +10,18 @@ public class Graph_Algo implements graph_algorithms{
         graph = g;
     }
 
+    /**
+     * creates deep copy of init graph
+     * @return
+     */
     @Override
     public graph copy() {
         graph copiedGraph = new Graph_DS();
+        //copy all nodes into new nodes, with new pointers
         for (node_data node : graph.getV()) {
             copiedGraph.addNode(new NodeData(node.getKey(),node.getInfo()));
         }
+        //copy all connections
         for (node_data sibling : graph.getV()) {
             for (node_data a : sibling.getNi()) {
                 copiedGraph.connect(a.getKey(),sibling.getKey());
@@ -24,42 +30,36 @@ public class Graph_Algo implements graph_algorithms{
         return copiedGraph;
     }
 
-    //public graph copy() {
-    //    graph copiedGraph = new Graph_DS();
-    //    for (node_data node : graph.getV()) {
-    //        copiedGraph.addNode(new NodeData(node.getKey(),node.getInfo()));
-    //        node_data currentNode = copiedGraph.getNode(node.getKey());
-    //        for (node_data sibling : node.getNi()) {
-    //            copiedGraph.addNode(new NodeData(sibling.getKey(),sibling.getInfo()));
-    //            currentNode.addNi(copiedGraph.getNode(sibling.getKey()));
-    //            copiedGraph.connect(node.getKey(),sibling.getKey());
-    //        }
-    //    }
-    //    return copiedGraph;
-    //}
-
+    /**
+     * checks if all nodes in graph are connected
+     * @return
+     */
     @Override
     public boolean isConnected() {
         if(graph.getV().size()==0) return true;
         node_data node;
-        //graph graphCopy = copy();
         try {
             node = graph.getV().stream().findFirst().get();
             surfAllConnectedNodes(node);
+            //go over all nodes to  see if one of them wasn't visited
             for (node_data n : graph.getV()) {
                 if(n.getTag()<0){
-                    System.out.println("not connected node: "+n.getKey());
-                    resetTag();
+                    resetGraph();
                     return false;
                 }
             }
         }catch (Exception e ) {
             System.out.println("Empty Graph");
         }
-        resetTag();
+        resetGraph();
         return true;
     }
 
+    /**
+     * starts going over nodes with accordance to BFS algorithm
+     * @param node start point of algo
+     * @throws NullPointerException when the start node doesn't exist
+     */
     private void surfAllConnectedNodes(node_data node) throws NullPointerException{
         Queue<node_data> nodeDataQueue = new LinkedList<>();
         nodeDataQueue.add(node);
@@ -67,55 +67,75 @@ public class Graph_Algo implements graph_algorithms{
         node.setTag(0);
         while(!nodeDataQueue.isEmpty()){
             node = nodeDataQueue.remove();
+            //updates all of neighbors as visited
             for (node_data n: node.getNi()) {
                 if(n.getTag()<0) {
                     n.setTag(node.getTag() + 1);
+                    n.setInfo(node.getInfo()+","+n.getInfo());
                     nodeDataQueue.add(n);
                 }
             }
         }
     }
 
-    private void resetTag() {
+    /**
+     * resets all tags of nodes in  graph
+     * is faster then creating a new copy for function use
+     */
+    private void resetGraph() {
         for (node_data now : graph.getV()) {
+            now.setInfo("");
             now.setTag(-1);
         }
     }
 
+    /**
+     * gets the shortest distance from start node to other node
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return the nodes tag, the amount of connections to go through to get to node
+     */
     @Override
     public int shortestPathDist(int src, int dest) {
-        //graph copiedGraph = copy();
         try {
             surfAllConnectedNodes(graph.getNode(src));
             int tag = graph.getNode(dest).getTag();
-            resetTag();
+            resetGraph();
             return tag;
         }catch(Exception e){
             return -1;
         }
     }
 
+
+    /**
+     *
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
     @Override
     public List<node_data> shortestPath(int src, int dest) {
-        //graph copiedGraph = copy();
         List<node_data> pathToDest = new ArrayList<>();
         try{
             surfAllConnectedNodes(graph.getNode(src));
-            pathToDest.add(graph.getNode(dest));
-            if(pathToDest.get(0).getTag()==-1) return pathToDest;
-            for (int i = 0; i < graph.getNode(dest).getTag(); i++) {
-                node_data temp = pathToDest.get(0);
-                for (node_data node : pathToDest.get(i).getNi()) {
-                    if(temp.getTag()>node.getTag()) temp = node;
-                }
-                pathToDest.add(temp);
+            if(graph.getNode(dest).getTag()==-1) return pathToDest;
+            node_data node = graph.getNode(dest);
+            for (String s : node.getInfo().split(",")) {
+                pathToDest.add(graph.getNode(Integer.parseInt(s)));
             }
+            //for (int i = 0; i < graph.getNode(dest).getTag(); i++) {
+            //    node_data temp = pathToDest.get(0);
+            //    for (node_data node : pathToDest.get(i).getNi()) {
+            //        if(temp.getTag()>node.getTag()) temp = node;
+            //    }
+            //    pathToDest.add(temp);
+            //}
             return pathToDest;
-        }catch(Exception e){
-            return null;
-        }
-        finally {
-            resetTag();
+        }catch (NullPointerException e){
+            return pathToDest;
+        }finally {
+            resetGraph();
         }
     }
 }

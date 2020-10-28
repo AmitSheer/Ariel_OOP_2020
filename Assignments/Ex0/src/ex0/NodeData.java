@@ -6,8 +6,11 @@ import java.util.HashSet;
 
 public class NodeData implements node_data {
     private Integer key;
+    //counter to generate appropriate keys
     private static int nodeCounter;
+    //neighbors of nodes
     private HashSet<node_data> siblingNodes;
+    //neighbors Ids
     private HashSet<Integer> siblingNodesIds;
     private String info;
     private int tag;
@@ -51,6 +54,11 @@ public class NodeData implements node_data {
         return siblingNodesIds.contains(key);
     }
 
+    /**
+     * adds the node as neighbors
+     * then sends current node to be added as neighbors at the other node
+     * @param t node to add as neighbors
+     */
     @Override
     public void addNi(node_data t) {
         if(siblingNodesIds.contains(t.getKey())) return;
@@ -59,6 +67,11 @@ public class NodeData implements node_data {
         t.addNi(this);
     }
 
+    /**
+     * remove node from neighbors list and id list
+     * then send current node to be removed from other node
+     * @param node
+     */
     @Override
     public void removeNode(node_data node) {
         if(siblingNodesIds.contains(node.getKey())) {
@@ -87,15 +100,4 @@ public class NodeData implements node_data {
     public void setTag(int t) {
         this.tag=t;
     }
-
-   //@Override
-   //public String toString() {
-   //    return "NodeData{" +
-   //            "key=" + key.toString() +
-   //            ", siblingNodes=" + siblingNodes.toString() +
-   //            ", siblingNodesIds=" + siblingNodesIds.toString() +
-   //            ", info='" + info + '\'' +
-   //            ", tag=" + tag +
-   //            '}';
-   //}
 }
