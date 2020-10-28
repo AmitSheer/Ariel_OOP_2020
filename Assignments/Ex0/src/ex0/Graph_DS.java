@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Graph_DS implements graph{
     private HashMap<Integer,node_data> nodes;
-    private Hashtable<Integer, HashSet<Integer>> edges;
     private Integer edgeSize;
     private HashSet<node_data> v;
     private int numberOfChanges;
@@ -13,7 +12,6 @@ public class Graph_DS implements graph{
 
     public Graph_DS(){
         nodes = new HashMap<>();
-        edges = new Hashtable<>();
         v= new HashSet<>();
         edgeSize=0;
         numberOfChanges=0;
@@ -42,7 +40,7 @@ public class Graph_DS implements graph{
     public void connect(int node1, int node2) {
         if(nodes.containsKey(node1)&& nodes.containsKey(node2)&&!nodes.get(node1).hasNi(node2)&&!nodes.get(node2).hasNi(node1)&&node1!=node2){
             nodes.get(node1).addNi(nodes.get(node2));
-            nodes.get(node2).addNi(nodes.get(node1));
+            //nodes.get(node2).addNi(nodes.get(node1));
             edgeSize++;
             numberOfChanges++;
         }
@@ -65,11 +63,11 @@ public class Graph_DS implements graph{
     public node_data removeNode(int key) {
         node_data node = nodes.get(key);
         if(node == null) return null;
-        v.remove(node);
         while(nodes.get(key).getNi().size()>0){
             int node_key = nodes.get(key).getNi().stream().findFirst().get().getKey();
             removeEdge(node_key,key);
         }
+        v.remove(node);
         nodes.remove(key);
         numberOfChanges++;
         return node;
@@ -77,15 +75,11 @@ public class Graph_DS implements graph{
 
     @Override
     public void removeEdge(int node1, int node2) {
-        try{
-        if(nodes.get(node1).hasNi(node2)||nodes.get(node2).hasNi(node1)){
+        if(nodes.get(node1).hasNi(node2)){
             nodes.get(node1).removeNode(nodes.get(node2));
-            nodes.get(node2).removeNode(nodes.get(node1));
+            //nodes.get(node2).removeNode(nodes.get(node1));
             edgeSize--;
             numberOfChanges++;
-        }
-        }catch (NullPointerException e){
-
         }
     }
 

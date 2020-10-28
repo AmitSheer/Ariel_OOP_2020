@@ -3,8 +3,10 @@ package ex0;
 import java.util.Collection;
 import java.util.HashSet;
 
+
 public class NodeData implements node_data {
     private Integer key;
+    private static int nodeCounter;
     private HashSet<node_data> siblingNodes;
     private HashSet<Integer> siblingNodesIds;
     private String info;
@@ -14,6 +16,8 @@ public class NodeData implements node_data {
         siblingNodes = new HashSet<>();
         siblingNodes = new HashSet<>();
         siblingNodesIds = new HashSet<>();
+        key = nodeCounter;
+        nodeCounter++;
         this.tag=-1;
     }
 
@@ -47,10 +51,10 @@ public class NodeData implements node_data {
 
     @Override
     public void addNi(node_data t) {
-        if(!siblingNodesIds.contains(t.getKey())) {
-            siblingNodes.add(t);
-            siblingNodesIds.add(t.getKey());
-        }
+        if(siblingNodesIds.contains(t.getKey())) return;
+        siblingNodes.add(t);
+        siblingNodesIds.add(t.getKey());
+        t.addNi(this);
     }
 
     @Override
@@ -58,6 +62,7 @@ public class NodeData implements node_data {
         if(siblingNodesIds.contains(node.getKey())) {
             siblingNodes.remove(node);
             siblingNodesIds.remove(node.getKey());
+            node.removeNode(this);
         }
     }
 
