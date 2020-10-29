@@ -3,11 +3,11 @@ package ex0;
 import java.util.*;
 
 public class Graph_DS implements graph{
-    //Holds the nodes
+    //Holds the nodes in order to have access to the nodes in O(1)
     private HashMap<Integer,node_data> nodes;
     //counts the number of edges
     private Integer edgeSize;
-    //holds the values of nodes
+    //holds the values of nodes in order to be able to get all of the nodes in O(1)
     private HashSet<node_data> v;
     //counts the numbers of changes in graph
     private int numberOfChanges;

@@ -8,9 +8,9 @@ public class NodeData implements node_data {
     private Integer key;
     //counter to generate appropriate keys
     private static int nodeCounter;
-    //neighbors of nodes
+    //neighbors of nodes to have access to all of the nodes themselves O(1)
     private HashSet<node_data> siblingNodes;
-    //neighbors Ids
+    //neighbors Ids, to check quickly if a node is a ni to this node O(1)
     private HashSet<Integer> siblingNodesIds;
     private String info;
     private int tag;
