@@ -16,11 +16,12 @@ public class NodeData implements node_data {
     private int tag;
 
     public NodeData(){
-        siblingNodes = new HashSet<>();
-        siblingNodes = new HashSet<>();
-        siblingNodesIds = new HashSet<>();
-        key = nodeCounter;
+        this.siblingNodes = new HashSet<>();
+        this.siblingNodes = new HashSet<>();
+        this.siblingNodesIds = new HashSet<>();
+        this.key = nodeCounter;
         nodeCounter++;
+        this.info = String.valueOf(nodeCounter);
         this.tag=-1;
     }
 

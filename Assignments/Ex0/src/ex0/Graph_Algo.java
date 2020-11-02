@@ -84,7 +84,7 @@ public class Graph_Algo implements graph_algorithms{
      */
     private void resetGraph() {
         for (node_data now : graph.getV()) {
-            now.setInfo("");
+            now.setInfo(String.valueOf(now.getKey()));
             now.setTag(-1);
         }
     }

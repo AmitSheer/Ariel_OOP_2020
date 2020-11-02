@@ -1,6 +1,12 @@
 # BFS algorithm on unidirectional graph
 The project contains three classes and three interfaces which they implement. It uses an implementation of BFS
 algorithm in order to travers the graph nodes.
+
+# How it works
+In the code, we have a method that is from a starting node, marks it as visited, takes all of its neighbors, and puts them in a queue,
+then repeats the process for all of the elements in the queue. The stop condition is that we can't push a node that is marked as visited.
+That way we ensure that the Method stops going the elements from the graph.
+
 ## Usage
 To work with the project you need to:\
 1. create an instance of the graph itself: `Graph_DS graph = new Graph_DS()`
