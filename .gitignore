@@ -34,6 +34,7 @@
 # .idea/modules.xml
 # .idea/*.iml
 # .idea/modules
+# *.iml
 # *.ipr
 
 # CMake
@@ -163,3 +164,5 @@ local.properties
 /Exe/Ex0/
 
 *.kotlin_module
+
+*.iml
