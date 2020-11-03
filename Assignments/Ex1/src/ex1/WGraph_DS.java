@@ -99,8 +99,8 @@ public class WGraph_DS implements weighted_graph{
         return 0;
     }
 
-    class Edges extends HashMap<Integer,Double>{
-        private HashMap<Integer,node_info> allConnections = new HashMap<>();
+    static class Edges extends HashMap<Integer,Double>{
+        private final HashMap<Integer,node_info> allConnections = new HashMap<>();
         public void addConnection(node_info nodeInfo){
             allConnections.putIfAbsent(nodeInfo.getKey(),nodeInfo);
         }
@@ -130,6 +130,13 @@ public class WGraph_DS implements weighted_graph{
             nodeCounter++;
         }
 
+        public NodeInfo(node_info node){
+            this.key = node.getKey();
+            this.info = String.valueOf(this.key);
+            this.tag = -1;
+            nodeCounter= nodeCounter + this.key;
+        }
+
         @Override
         public int getKey() {
             return this.key;
@@ -151,9 +158,8 @@ public class WGraph_DS implements weighted_graph{
         }
 
         @Override
-        public double setTag(double t) {
+        public void setTag(double t) {
             this.tag = t;
-            return this.tag;
         }
 
         @Override
