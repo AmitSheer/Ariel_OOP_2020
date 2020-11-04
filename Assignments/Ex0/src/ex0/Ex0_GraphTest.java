@@ -1,5 +1,5 @@
 package ex0;
-import org.junit.Test;
+import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
@@ -40,7 +40,7 @@ public class Ex0_GraphTest {
      * Runtime test - if the testing method is still working after 5 seconds (5000 mili sec)
      * An exception is being thrown.
      */
-    @Test(timeout = 5000)
+    @Test(timeOut = 5000)
     public void graphTest_runtime() {
         int v=1000*50, e=v*6;
         graph g = graph_creator(v,e,1);
