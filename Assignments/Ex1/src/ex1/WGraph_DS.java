@@ -76,12 +76,27 @@ public class WGraph_DS implements weighted_graph{
 
     @Override
     public node_info removeNode(int key) {
-        return null;
+        node_info node = nodes.remove(key);
+        try{
+            Edges edge = edges.get(key);
+            Collection<node_info> a  = edge.getConnections();
+            while(a.iterator().hasNext()){
+                removeEdge(a.iterator().next().getKey(),key);
+            }
+            edges.remove(key);
+        }catch(Exception ignore){}
+        return node;
     }
 
     @Override
     public void removeEdge(int node1, int node2) {
-
+        if (hasEdge(node1, node2)){
+            edges.get(node1).remove(node2);
+            edges.get(node1).removeConnection(node2);
+            edges.get(node2).remove(node1);
+            edges.get(node2).removeConnection(node1);
+            edgeCount--;
+        }
     }
 
     @Override
@@ -106,6 +121,10 @@ public class WGraph_DS implements weighted_graph{
         }
         public Collection<node_info> getConnections(){
             return allConnections.values();
+        }
+
+        public node_info removeConnection(int key){
+            return allConnections.remove(key);
         }
 
     }

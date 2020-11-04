@@ -117,15 +117,9 @@ class WGraph_DSTest {
 
     @Test
     void GetAllConnectionToSpecificNode() {
-        Random rnd = new Random(1);
-        for (int i = 0; i < 10; i++) {
-            graph.addNode(i);
-            nodes.add(graph.getNode(i));
-        }
-        while(graph.edgeSize()<10){
-            graph.connect((int)(10*rnd.nextDouble()),(int)(10*rnd.nextDouble()),1);
-        }
+        graphCreator(1, 10, 10, 1);
         assertEquals(2,graph.getV(0).size());
+
         for (node_info node_info : graph.getV(0)) {
             if(node_info.getKey()!=5&&node_info.getKey()!=9) fail(graph.getV(0).toString());
         }
@@ -138,10 +132,40 @@ class WGraph_DSTest {
 
     @Test
     void removeNode() {
+        graphCreator(1, 10, 10, 1);
+        graph.removeNode(0);
+        assertFalse(graph.hasEdge(0,5));
+        assertFalse(graph.hasEdge(0,9));
+        assertNull(graph.getNode(0));
+        assertEquals(8, graph.edgeSize());
+    }
+
+    @Test
+    void removeFakeNode() {
+        graphCreator(1, 10, 10, 1);
+        graph.removeNode(19);
+        assertTrue(graph.hasEdge(0,5));
+        assertTrue(graph.hasEdge(0,9));
+        assertNotNull(graph.getNode(0));
+        assertEquals(10, graph.edgeSize());
     }
 
     @Test
     void removeEdge() {
+        graphCreator(1, 10, 10, 1);
+        assertTrue(graph.hasEdge(0,5));
+        graph.removeEdge(0,5);
+        assertFalse(graph.hasEdge(0,5));
+        assertEquals(9, graph.edgeSize());
+    }
+
+    @Test
+    void removeNotExistingEdge() {
+        graphCreator(1, 10, 10, 1);
+        assertFalse(graph.hasEdge(0,7));
+        graph.removeEdge(0,7);
+        assertFalse(graph.hasEdge(0,7));
+        assertEquals(10, graph.edgeSize());
     }
 
     @Test
@@ -154,5 +178,17 @@ class WGraph_DSTest {
 
     @Test
     void getMC() {
+    }
+
+    public void graphCreator(int seed, int size, int edges, double weight){
+        Random rnd = new Random(seed);
+        for (int i = 0; i < size; i++) {
+            graph.addNode(i);
+            nodes.add(graph.getNode(i));
+        }
+        while(graph.edgeSize()<edges){
+            graph.connect((int)(size*rnd.nextDouble()),(int)(size*rnd.nextDouble()),1);
+        }
+
     }
 }
