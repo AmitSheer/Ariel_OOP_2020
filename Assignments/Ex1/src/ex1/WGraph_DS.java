@@ -123,18 +123,9 @@ public class WGraph_DS implements weighted_graph{
     }
 
     static class Edges extends HashMap<Integer,Double>{
-//        private final HashMap<Integer,node_info> allConnections = new HashMap<>();
-//        public void addConnection(node_info nodeInfo){
-//            allConnections.putIfAbsent(nodeInfo.getKey(),nodeInfo);
-//        }
-//        public Collection<node_info> getConnections(){
-//            return allConnections.values();
-//        }
-//        public node_info removeConnection(int key){
-//            return allConnections.remove(key);
-//        }
     }
-    public static class NodeInfo implements ex1.node_info {
+
+    public static class NodeInfo implements node_info {
         private static int nodeCounter=0;
         private final Integer key;
         private String info;

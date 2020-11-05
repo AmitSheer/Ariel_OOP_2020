@@ -7,8 +7,6 @@ public class Graph_DS implements graph{
     private HashMap<Integer,node_data> nodes;
     //counts the number of edges
     private Integer edgeSize;
-    //holds the values of nodes in order to be able to get all of the nodes in O(1)
-    private HashSet<node_data> v;
     //counts the numbers of changes in graph
     private int numberOfChanges;
     //V,E
@@ -18,7 +16,6 @@ public class Graph_DS implements graph{
      */
     public Graph_DS(){
         nodes = new HashMap<>();
-        v= new HashSet<>();
         edgeSize=0;
         numberOfChanges=0;
     }
@@ -52,7 +49,6 @@ public class Graph_DS implements graph{
     public void addNode(node_data n) {
         if(!nodes.containsKey(n.getKey())){
             nodes.putIfAbsent(n.getKey(), n);
-            v.add(n);
             numberOfChanges++;
         }
     }
@@ -77,7 +73,7 @@ public class Graph_DS implements graph{
      */
     @Override
     public Collection<node_data> getV() {
-        return v;
+        return nodes.values();
     }
 
     /**
@@ -109,7 +105,6 @@ public class Graph_DS implements graph{
             removeEdge(node_key,key);
         }
         //remove node from value list, and nodes
-        v.remove(node);
         nodes.remove(key);
         numberOfChanges++;
         return node;
@@ -149,7 +144,6 @@ public class Graph_DS implements graph{
         return "Graph_DS{" +
                 "nodes=" + nodes +
                 ", edgeSize=" + edgeSize +
-                ", v=" + v +
                 '}';
     }
 }

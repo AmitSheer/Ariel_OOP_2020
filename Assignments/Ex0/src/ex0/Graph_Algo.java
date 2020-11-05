@@ -20,13 +20,14 @@ public class Graph_Algo implements graph_algorithms{
         //copy all nodes into new nodes, with new pointers
         for (node_data node : graph.getV()) {
             copiedGraph.addNode(new NodeData(node.getKey(),node.getInfo()));
-        }
-        //copy all connections
-        for (node_data sibling : graph.getV()) {
-            for (node_data a : sibling.getNi()) {
-                copiedGraph.connect(a.getKey(),sibling.getKey());
+            for (node_data a : node.getNi()) {
+                copiedGraph.connect(a.getKey(),node.getKey());
             }
         }
+//        //copy all connections
+//        for (node_data sibling : graph.getV()) {
+//
+//        }
         return copiedGraph;
     }
 
@@ -124,13 +125,6 @@ public class Graph_Algo implements graph_algorithms{
             for (String s : node.getInfo().split(",")) {
                 pathToDest.add(graph.getNode(Integer.parseInt(s)));
             }
-            //for (int i = 0; i < graph.getNode(dest).getTag(); i++) {
-            //    node_data temp = pathToDest.get(0);
-            //    for (node_data node : pathToDest.get(i).getNi()) {
-            //        if(temp.getTag()>node.getTag()) temp = node;
-            //    }
-            //    pathToDest.add(temp);
-            //}
             return pathToDest;
         }catch (NullPointerException e){
             return pathToDest;

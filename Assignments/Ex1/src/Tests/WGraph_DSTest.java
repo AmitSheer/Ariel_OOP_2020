@@ -8,11 +8,6 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WGraph_DSTest extends BaseTest{
-    @BeforeEach
-    void setUp() {
-        graph = new WGraph_DS();
-        nodes = new ArrayList<>();
-    }
 
     @Test
     void addNode() {
