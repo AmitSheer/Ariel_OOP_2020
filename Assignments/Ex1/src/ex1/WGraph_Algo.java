@@ -1,4 +1,46 @@
 package ex1;
 
-public class WGraph_Algo {
+import java.util.List;
+
+public class WGraph_Algo implements weighted_graph_algorithms {
+    private weighted_graph graph;
+    @Override
+    public void init(weighted_graph g) {
+        this.graph = g;
+    }
+
+    @Override
+    public weighted_graph getGraph() {
+        return this.graph;
+    }
+
+    @Override
+    public weighted_graph copy() {
+        return null;
+    }
+
+    @Override
+    public boolean isConnected() {
+        return false;
+    }
+
+    @Override
+    public double shortestPathDist(int src, int dest) {
+        return 0;
+    }
+
+    @Override
+    public List<node_info> shortestPath(int src, int dest) {
+        return null;
+    }
+
+    @Override
+    public boolean save(String file) {
+        return false;
+    }
+
+    @Override
+    public boolean load(String file) {
+        return false;
+    }
 }
