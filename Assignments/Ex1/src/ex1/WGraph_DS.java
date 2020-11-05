@@ -7,11 +7,13 @@ public class WGraph_DS implements weighted_graph{
     private final HashMap<Integer,node_info> nodes;
     private final HashMap<Integer,Edges> edges;
     private Integer edgeCount;
+    private Integer mc;
 
     public WGraph_DS(){
         this.nodes = new HashMap<>();
         this.edges = new HashMap<>();
-        edgeCount=0;
+        this.edgeCount=0;
+        this.mc = 0;
     }
 
     @Override
@@ -38,21 +40,23 @@ public class WGraph_DS implements weighted_graph{
     public void addNode(int key) {
         this.nodes.putIfAbsent(key,new NodeInfo(key));
         this.edges.putIfAbsent(key, new Edges());
+        this.mc++;
     }
 
     @Override
     public void connect(int node1, int node2, double w) {
         if (!hasEdge(node1,node2)&&w>=0&&node1!=node2) {
             try{
-                if(edges.get(node1).containsKey(node2)){
-                    edges.get(node2).put(node1,w);
-                    edges.get(node1).put(node2,w);
+                if(this.edges.get(node1).containsKey(node2)){
+                    this.edges.get(node2).put(node1,w);
+                    this.edges.get(node1).put(node2,w);
                 }else{
-                    edges.get(node1).put(node2,w);
-                    edges.get(node2).put(node1,w);
-                    edges.get(node1).addConnection(nodes.get(node2));
-                    edges.get(node2).addConnection(nodes.get(node1));
-                    edgeCount++;
+                    this.edges.get(node1).put(node2,w);
+                    this.edges.get(node2).put(node1,w);
+                    this.edges.get(node1).addConnection(nodes.get(node2));
+                    this.edges.get(node2).addConnection(nodes.get(node1));
+                    this.edgeCount++;
+                    this.mc++;
                 }
             }catch(NullPointerException ignored){
 
@@ -78,12 +82,12 @@ public class WGraph_DS implements weighted_graph{
     public node_info removeNode(int key) {
         node_info node = nodes.remove(key);
         try{
-            Edges edge = edges.get(key);
-            Collection<node_info> a  = edge.getConnections();
+            Collection<node_info> a  = edges.get(key).getConnections();
             while(a.iterator().hasNext()){
                 removeEdge(a.iterator().next().getKey(),key);
             }
-            edges.remove(key);
+            this.edges.remove(key);
+            this.mc++;
         }catch(Exception ignore){}
         return node;
     }
@@ -96,6 +100,7 @@ public class WGraph_DS implements weighted_graph{
             edges.get(node2).remove(node1);
             edges.get(node2).removeConnection(node1);
             edgeCount--;
+            mc++;
         }
     }
 
@@ -106,12 +111,12 @@ public class WGraph_DS implements weighted_graph{
 
     @Override
     public int edgeSize() {
-        return edgeCount;
+        return this.edgeCount;
     }
 
     @Override
     public int getMC() {
-        return 0;
+        return this.mc;
     }
 
     static class Edges extends HashMap<Integer,Double>{
@@ -122,11 +127,9 @@ public class WGraph_DS implements weighted_graph{
         public Collection<node_info> getConnections(){
             return allConnections.values();
         }
-
         public node_info removeConnection(int key){
             return allConnections.remove(key);
         }
-
     }
 
     public static class NodeInfo implements node_info{
