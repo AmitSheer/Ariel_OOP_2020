@@ -169,15 +169,65 @@ class WGraph_DSTest {
     }
 
     @Test
+    void removeNotExistingNodeEdge() {
+        graphCreator(1, 10, 10, 1);
+        assertFalse(graph.hasEdge(0,7));
+        graph.removeEdge(0,11);
+        assertFalse(graph.hasEdge(0,7));
+        assertEquals(10, graph.edgeSize());
+    }
+
+
+    @Test
     void nodeSize() {
+        graphCreator(1,10,10,1);
+        assertEquals(10,graph.nodeSize());
+        graph.removeNode(0);
+        assertEquals(9,graph.nodeSize());
+    }
+
+    @Test
+    void nodeSizeAfterDeletingFakeNode() {
+        graphCreator(1,10,10,1);
+        assertEquals(10,graph.nodeSize());
+        graph.removeNode(20);
+        assertEquals(10,graph.nodeSize());
+    }
+
+    @Test
+    void nodeSizeAfterAddingNode() {
+        graphCreator(1,10,10,1);
+        assertEquals(10,graph.nodeSize());
+        graph.addNode(20);
+        assertEquals(11,graph.nodeSize());
     }
 
     @Test
     void edgeSize() {
+        graphCreator(1,10,10,1);
+        assertEquals(10,graph.edgeSize());
+        graph.removeEdge(0,5);
+        assertEquals(9,graph.edgeSize());
+    }
+
+    @Test
+    void edgeSizeAfterDeleteFakeEdge() {
+        graphCreator(1,10,10,1);
+        assertEquals(10,graph.edgeSize());
+        graph.removeEdge(0,11);
+        assertEquals(10,graph.edgeSize());
     }
 
     @Test
     void getMC() {
+        graphCreator(1,10,10,1);
+        assertEquals(20,graph.getMC());
+        graph.removeEdge(0,5);
+        assertEquals(21,graph.getMC());
+        graph.connect(0,5,1);
+        assertEquals(22,graph.getMC());
+        graph.removeNode(0);
+        assertEquals(25,graph.getMC());
     }
 
     public void graphCreator(int seed, int size, int edges, double weight){

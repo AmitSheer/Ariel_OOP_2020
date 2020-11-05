@@ -4,10 +4,7 @@ import ex1.WGraph_DS;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class NodeInfoTest {
     static WGraph_DS.NodeInfo nodeInfo;
@@ -18,8 +15,6 @@ class NodeInfoTest {
 
     @Test
     void getKey() {
-        HashMap<Integer,Double> a = new HashMap<>();
-        if(a.get(1) != null) fail();
         assertEquals(nodeInfo.getKey(), 0);
     }
 
