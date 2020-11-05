@@ -1,18 +1,12 @@
 package Tests;
 
-import ex1.WGraph_DS;
-import ex1.node_info;
+import ex1.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-import java.util.Random;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class WGraph_DSTest {
-    static WGraph_DS graph;
-    static ArrayList<node_info> nodes;
+class WGraph_DSTest extends BaseTest{
     @BeforeEach
     void setUp() {
         graph = new WGraph_DS();
@@ -180,15 +174,4 @@ class WGraph_DSTest {
     void getMC() {
     }
 
-    public void graphCreator(int seed, int size, int edges, double weight){
-        Random rnd = new Random(seed);
-        for (int i = 0; i < size; i++) {
-            graph.addNode(i);
-            nodes.add(graph.getNode(i));
-        }
-        while(graph.edgeSize()<edges){
-            graph.connect((int)(size*rnd.nextDouble()),(int)(size*rnd.nextDouble()),1);
-        }
-
-    }
 }
