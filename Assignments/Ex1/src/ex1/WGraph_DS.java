@@ -1,5 +1,7 @@
 package ex1;
 
+import org.json.simple.JSONValue;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,10 +58,10 @@ public class WGraph_DS implements weighted_graph{
 //                    this.edges.get(node1).addConnection(nodes.get(node2));
 //                    this.edges.get(node2).addConnection(nodes.get(node1));
                     this.edgeCount++;
-                    this.mc++;
                 }
                 this.edges.get(node1).put(node2,w);
                 this.edges.get(node2).put(node1,w);
+                this.mc++;
             }catch(NullPointerException ignored){
 
             }
@@ -125,6 +127,7 @@ public class WGraph_DS implements weighted_graph{
     static class Edges extends HashMap<Integer,Double>{
     }
 
+
     public static class NodeInfo implements node_info {
         private static int nodeCounter=0;
         private final Integer key;
@@ -134,21 +137,21 @@ public class WGraph_DS implements weighted_graph{
         public NodeInfo(int key){
             this.key = key;
             this.info = String.valueOf(key);
-            this.tag = -1;
+            this.tag = Integer.MAX_VALUE;
             nodeCounter= nodeCounter + key;
         }
 
         public NodeInfo(){
             this.key = nodeCounter;
             this.info = String.valueOf(this.key);
-            this.tag = -1;
+            this.tag = Integer.MAX_VALUE;
             nodeCounter++;
         }
 
         public NodeInfo(node_info node){
             this.key = node.getKey();
             this.info = String.valueOf(this.key);
-            this.tag = -1;
+            this.tag = Integer.MAX_VALUE;
             nodeCounter= nodeCounter + this.key;
         }
 
@@ -179,10 +182,10 @@ public class WGraph_DS implements weighted_graph{
 
         @Override
         public String toString() {
-            return "NodeInfo{" +
-                    "key=" + key +
-                    ", info='" + info + '\'' +
-                    ", tag=" + tag +
+            return "{" +
+                    "key:" + key +
+                    ", info:'" + info + '\'' +
+                    ", tag:" + tag +
                     '}';
         }
     }
