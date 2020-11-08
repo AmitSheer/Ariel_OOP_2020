@@ -111,8 +111,30 @@ class WGraph_AlgoTest extends BaseTest {
             graph.connect(i-1,i,1);
         }
         algo.init(graph);
-        algo.save("./temp.json");
+        assertTrue(algo.save(path+"/writeOver.json"));
     }
+
+    @Test
+    void saveOverExistingFile() {
+        graphCreator(1,11,0,1);
+        for (int i = 1; i < 10; i++) {
+            graph.connect(i-1,i,1);
+        }
+        algo.init(graph);
+        assertTrue(algo.save(path+"/writeOver.json"));
+
+    }
+
+    @Test
+    void saveTextFile() {
+        graphCreator(1,10,0,1);
+        for (int i = 1; i < 10; i++) {
+            graph.connect(i-1,i,1);
+        }
+        algo.init(graph);
+        assertTrue(algo.save(path+"/writeOver.txt"));
+    }
+
 
     @Test
     void load() {
@@ -121,7 +143,46 @@ class WGraph_AlgoTest extends BaseTest {
             graph.connect(i-1,i,1);
         }
         algo.init(graph);
-        assertTrue(algo.load("./temp.json"));
+        assertTrue(algo.load(path+"/testFile.json"));
+        assertTrue(compareGraph(graph, algo.getGraph()));
+    }
+
+    @Test
+    void loadEmptyFile() {
+        graphCreator(1,10,10,1);
+        algo.init(graph);
+        assertFalse(algo.load(path+"/empty.json"));
+        assertEquals(10,algo.getGraph().getV().size());
+        assertEquals(10,algo.getGraph().edgeSize());
+    }
+
+    @Test
+    void loadCorruptedFile() {
+        graphCreator(1,10,10,1);
+        algo.init(graph);
+        assertFalse(algo.load(path+"/corruptedFile.json"));
+        assertEquals(10,algo.getGraph().getV().size());
+        assertEquals(10,algo.getGraph().edgeSize());
+    }
+
+    @Test
+    void loadNotExistingFile() {
+        graphCreator(1,10,0,1);
+        for (int i = 1; i < 10; i++) {
+            graph.connect(i-1,i,1);
+        }
+        algo.init(graph);
+        assertFalse(algo.load(path+"/fake.json"));
+    }
+
+    @Test
+    void loadTextFile() {
+        graphCreator(1,10,0,1);
+        for (int i = 1; i < 10; i++) {
+            graph.connect(i-1,i,1);
+        }
+        algo.init(graph);
+        assertTrue(algo.load(path+"/testFile.txt"));
         assertTrue(compareGraph(graph, algo.getGraph()));
     }
 }

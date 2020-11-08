@@ -1,9 +1,14 @@
 package Tests;
 
 import ex1.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,6 +17,23 @@ public class BaseTest {
     static WGraph_DS graph;
     static ArrayList<WGraph_DS.NodeInfo> nodes;
     static WGraph_Algo algo;
+    static String path = "src/Tests/testfiles";
+    static File f;
+    static  FileWriter writer;
+
+    @BeforeAll
+    static void mainSetup() throws IOException {
+        f = new File(path+"/writeOver.json");
+        writer = new FileWriter(f.getPath());
+        f.createNewFile();
+        writer.write("blabla");
+        writer.close();
+        f = new File(path+"/writeOver.txt");
+        writer = new FileWriter(f.getPath());
+        f.createNewFile();
+        writer.write("blabla");
+        writer.close();
+    }
 
     @BeforeEach
     void setUp() {

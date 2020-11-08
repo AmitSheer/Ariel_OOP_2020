@@ -11,8 +11,10 @@ import java.util.*;
 
 public class WGraph_Algo implements weighted_graph_algorithms {
     private weighted_graph graph;
-    private HashSet<Integer> visited;
-
+    private Dijkstra algo;
+    public WGraph_Algo(){
+        this.algo = new Dijkstra();
+    }
     @Override
     public void init(weighted_graph g) {
         this.graph = g;
@@ -38,7 +40,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     @Override
     public boolean isConnected() {
         if(this.graph.getV().size()==0) return true;
-        Dijkstra(this.graph.getV().stream().findFirst().get(), -1);
+        this.algo.dijkstra(this.graph, this.graph.getV().stream().findFirst().get(), -1);
         for (node_info node : this.graph.getV()) {
             if (node.getTag() == Integer.MAX_VALUE) {
                 resetGraph();
@@ -53,7 +55,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     public double shortestPathDist(int src, int dest) {
         if (this.graph.getV().size() == 0 || this.graph.getNode(src) == null || this.graph.getNode(src) == null)
             return -1;
-        Dijkstra(graph.getNode(src), dest);
+        this.algo.dijkstra(this.graph, graph.getNode(src), dest);
         if (this.graph.getNode(dest).getTag() == Integer.MAX_VALUE){
             resetGraph();
             return -1;
@@ -67,7 +69,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     @Override
     public List<node_info> shortestPath(int src, int dest) {
         List<node_info> nodePathToDest = new LinkedList<>();
-        Dijkstra(this.graph.getNode(src),dest);
+        this.algo.dijkstra(this.graph, graph.getNode(src), dest);
         String [] strPath = this.graph.getNode(dest).getInfo().split(",");
         for (String nodeKey : strPath) {
             nodePathToDest.add(this.graph.getNode(Integer.parseInt(nodeKey)));
@@ -78,57 +80,36 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public boolean save(String file) {
-        //file = pathFixer(file);
         try {
+            if(!new File(file).createNewFile()) System.out.println("File with the same name exists, will write over the file");
             FileWriter fileWriter = new FileWriter(file);
-            JSONObject jsonObject = new JSONObject();
-            JSONArray jsonNodeArray = new JSONArray();
-            JSONObject jsonEdgesObject = new JSONObject();
-            for (node_info node : this.graph.getV()) {
-                jsonObject.put("key",node.getKey());
-                jsonObject.put("info",node.getKey());
-                for (node_info connection: this.graph.getV(node.getKey())) {
-                    jsonEdgesObject.put(connection.getInfo(),this.graph.getEdge(node.getKey(),connection.getKey()));
-                }
-                jsonObject.put("edge",jsonEdgesObject);
-                jsonNodeArray.add(jsonObject);
-                jsonObject = new JSONObject();
-                jsonEdgesObject = new JSONObject();
-            }
-            fileWriter.write(jsonNodeArray.toString());
+            fileWriter.write(new JsonGraphParser().parseGraph(this.graph).toJSONString());
             fileWriter.close();
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public boolean load(String file) {
-        //file = pathFixer(file);
-        try (FileReader reader = new FileReader(file)){
-            JSONParser jsonParser = new JSONParser();
-            Object obj = jsonParser.parse(reader);
-            JSONArray nodesData = (JSONArray) obj;
-            weighted_graph graph = new WGraph_DS();
-            JSONObject jo;
-            for (Object node :nodesData) {
-                jo = (JSONObject)node;
-                graph.addNode(((Long)jo.get("key")).intValue());
+        File f = new File(file);
+        if(f.exists()){
+            try (FileReader reader = new FileReader(file)){
+                weighted_graph tempGraph = new JsonGraphParser().parseJsonToGraph(reader);
+                if(tempGraph == null)
+                    return false;
+                this.init(tempGraph);
+                reader.close();
+                return true;
+            } catch (ParseException | IOException e) {
+                e.printStackTrace();
+                return false;
             }
-            for (Object node :nodesData) {
-                jo = (JSONObject)node;
-                int src = ((Long)jo.get("key")).intValue();
-                JSONObject edges = (JSONObject)jo.get("edge");
-                for (Object key :edges.keySet()) {
-                    graph.connect(src,Integer.parseInt(key.toString()), (Double) edges.get(key));
-                }
-            }
-            this.graph = graph;
-        } catch (Exception e) {
+        }else{
             return false;
         }
-        return true;
     }
 
     /**
@@ -141,50 +122,5 @@ public class WGraph_Algo implements weighted_graph_algorithms {
             now.setTag(Integer.MAX_VALUE);
         }
     }
-//    private String pathFixer(String path){
-//        String[] pathArr = path.split("\\.");
-//        if (!pathArr[pathArr.length - 1].equals("json")){
-//            pathArr[pathArr.length-1] = "json";
-//        }
-//        StringBuilder fileBuilder = new StringBuilder("\\");
-//        for (String s : pathArr) {
-//            fileBuilder.append(s);
-//        }
-//        return fileBuilder.toString();
-//    }
-
-    private void Dijkstra(node_info start, Integer nodeKeyToFind){
-        PriorityQueue<node_info> a = new PriorityQueue<>(new CompareToForQueue());
-        start.setTag(0);
-        HashSet<Integer> visited = new HashSet<>();
-        a.add(start);
-        while(a.size()>0){
-            node_info curr = a.remove();
-            if(!visited.contains(curr.getKey()))
-            {
-                visited.add(curr.getKey());
-                //if(nodeKeyToFind== curr.getKey()) break;
-                for (node_info node :graph.getV(curr.getKey())) {
-                    if ((curr.getTag()+ graph.getEdge(curr.getKey(), node.getKey()))<node.getTag()){
-                        node.setTag(curr.getTag()+ graph.getEdge(curr.getKey(), node.getKey()));
-                        node.setInfo(curr.getInfo()+","+node.getKey());
-                        a.add(node);
-                    }
-                }
-            }
-        }
-    }
-
-    private static class CompareToForQueue implements Comparator<node_info>{
-        @Override
-        public int compare(node_info o1, node_info o2) {
-            if(o1.getTag()==o2.getTag())
-                return 0;
-            else if(o1.getTag()<o2.getTag())
-                return -1;
-            return 1;
-        }
-    }
 }
-
 
