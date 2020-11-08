@@ -134,7 +134,7 @@ public class WGraph_DS implements weighted_graph{
     }
 
 
-    public static class NodeInfo implements node_info {
+    private static class NodeInfo implements node_info {
         private static int nodeCounter=0;
         private final Integer key;
         private String info;

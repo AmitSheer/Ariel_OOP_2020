@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BaseTest {
     static WGraph_DS graph;
-    static ArrayList<WGraph_DS.NodeInfo> nodes;
     static WGraph_Algo algo;
     static String path = "src/Tests/testfiles";
     static File f;
@@ -38,7 +37,6 @@ public class BaseTest {
     @BeforeEach
     void setUp() {
         graph = new WGraph_DS();
-        nodes = new ArrayList<>();
         algo = new WGraph_Algo();
     }
 
@@ -46,9 +44,7 @@ public class BaseTest {
         Random rnd = new Random(seed);
         Random rndWeight = new Random(weight);
         for (int i = 0; i < size; i++) {
-            WGraph_DS.NodeInfo node = new WGraph_DS.NodeInfo();
             graph.addNode(i);
-            nodes.add(node);
         }
         while(graph.edgeSize()<edges){
             graph.connect((int)(size*rnd.nextDouble()),(int)(size*rnd.nextDouble()), rndWeight.nextDouble());

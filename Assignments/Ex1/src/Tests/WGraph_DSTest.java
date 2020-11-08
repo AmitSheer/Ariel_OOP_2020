@@ -1,7 +1,7 @@
 package Tests;
 
 import ex1.*;
-import ex1.WGraph_DS.NodeInfo;
+import ex1.WGraph_DS;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -12,8 +12,9 @@ class WGraph_DSTest extends BaseTest{
     @Test
     void addNode() {
         graph.addNode(0);
-        NodeInfo node = new NodeInfo(0);
-        assertEquals(node.toString(), graph.getNode(0).toString());
+        node_info node = graph.getNode(0);
+        assertEquals("0", node.getInfo());
+        assertEquals(0, node.getKey());
     }
     // Connection Tests
     @Test
@@ -98,10 +99,9 @@ class WGraph_DSTest extends BaseTest{
     void getV() {
         for (int i = 0; i < 10; i++) {
             graph.addNode(i);
-            nodes.add(new NodeInfo(i));
         }
         for (int i = 0; i < 10; i++) {
-            assertEquals(nodes.get(i).toString(),graph.getNode(i).toString(),String.valueOf(i));
+            assertEquals(i,graph.getNode(i).getKey(),String.valueOf(i));
         }
     }
 
