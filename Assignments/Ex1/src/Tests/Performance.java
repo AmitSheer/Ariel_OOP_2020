@@ -6,6 +6,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class Performance extends BaseTest {
     @Test
     void maxSizeGraphTimeCheck(){
@@ -15,6 +18,7 @@ public class Performance extends BaseTest {
         Timestamp n1 = Timestamp.from(Instant.now());
         graphCreatorForPerformanceTests2(1,maxNodes,maxEdges,1 );
         Timestamp n2 = Timestamp.from(Instant.now());
+        assertTrue((n2.getTime()-n1.getTime())/1000.0<10.0);
         System.out.println("started on: "+n1);
         System.out.println("ended on: "+n2);
         System.out.println(graph.edgeSize());
