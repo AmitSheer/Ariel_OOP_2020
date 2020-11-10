@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 
 public class Dijkstra {
-    public void dijkstra(weighted_graph graph, node_info start, Integer nodeKeyToFind) {
+    public int dijkstra(weighted_graph graph, node_info start, Integer nodeKeyToFind) {
         PriorityQueue<node_info> a = new PriorityQueue<>(new CompareToForQueue());
         start.setTag(0);
         HashSet<Integer> visited = new HashSet<>();
         a.add(start);
-        while (a.size() > 0) {
+        while (a.size() > 0&& visited.size()!= graph.nodeSize()) {
             node_info curr = a.remove();
             if (!visited.contains(curr.getKey())) {
                 visited.add(curr.getKey());
@@ -24,6 +24,7 @@ public class Dijkstra {
                 }
             }
         }
+        return visited.size();
     }
 
     private static class CompareToForQueue implements Comparator<node_info> {

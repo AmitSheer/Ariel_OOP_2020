@@ -25,30 +25,38 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return this.graph;
     }
 
+    /**
+     * creates deep copy of init graph
+     * @return the copied graph, the new reference
+     */
     @Override
     public weighted_graph copy() {
         weighted_graph copiedGraph = new WGraph_DS();
+        //copy all nodes into new nodes, with new pointers
         for (node_info node : graph.getV()) {
             copiedGraph.addNode(node.getKey());
-            for (node_info connectedNode: graph.getV(node.getKey())) {
-                copiedGraph.connect(connectedNode.getKey(),node.getKey(),graph.getEdge(node.getKey(),connectedNode.getKey()));
+        }
+        Iterator<node_info> nodeIterator = this.graph.getV().iterator();
+        while (copiedGraph.edgeSize()!=graph.edgeSize()&&nodeIterator.hasNext()){
+            int nodeKey = nodeIterator.next().getKey();
+            //will connect all of the nodes as they were connected, the first connection wont
+            for (node_info connectedNode: graph.getV(nodeKey)) {
+                copiedGraph.connect(connectedNode.getKey(),nodeKey,graph.getEdge(nodeKey,connectedNode.getKey()));
             }
         }
         return copiedGraph;
     }
 
+    /**
+     * checks if all nodes in graph are connected
+     * @return
+     */
     @Override
     public boolean isConnected() {
         if(this.graph.getV().size()==0) return true;
-        this.algo.dijkstra(this.graph, this.graph.getV().stream().findFirst().get(), -1);
-        for (node_info node : this.graph.getV()) {
-            if (node.getTag() == Integer.MAX_VALUE) {
-                resetGraph();
-                return false;
-            }
-        }
+        int numberOfVisited = this.algo.dijkstra(this.graph, this.graph.getV().stream().findFirst().get(), -1);
         resetGraph();
-        return true;
+        return this.graph.nodeSize()==numberOfVisited;
     }
 
     @Override

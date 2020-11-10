@@ -7,59 +7,82 @@ import java.util.HashMap;
 import java.util.List;
 
 public class WGraph_DS implements weighted_graph{
+    //Holds the nodes in order to have access to the nodes in O(1)
     private final HashMap<Integer,node_info> nodes;
-    private final HashMap<Integer,Edges> edges;
+    //counts the number of edges
     private Integer edgeCount;
+    //counts the numbers of changes in graph
     private Integer mc;
 
+    /**
+     * init
+     */
     public WGraph_DS(){
         this.nodes = new HashMap<>();
-        this.edges = new HashMap<>();
         this.edgeCount=0;
         this.mc = 0;
     }
 
+    /**
+     * returns nodes data with specific key
+     * @param key - the node_id
+     * @return
+     */
     @Override
     public node_info getNode(int key) {
         return this.nodes.get(key);
     }
 
+    /**
+     * checks if there is an edge between two nodes
+     * @param node1
+     * @param node2
+     * @return
+     */
     @Override
     public boolean hasEdge(int node1, int node2) {
         try{
             return ((NodeInfo)this.nodes.get(node1)).hasNi(node2)&& ((NodeInfo)this.nodes.get(node2)).hasNi(node1);
-            //return edges.get(node1).containsKey(node2) && edges.get(node2).containsKey(node1);
         }catch (NullPointerException e ){
             return false;
         }
     }
 
+    /**
+     * gets the value of an edge between two nodes
+     * @param node1 node key
+     * @param node2 node key
+     * @return the value of the edge
+     */
     @Override
     public double getEdge(int node1, int node2) {
         return (this.hasEdge(node1,node2))?((NodeInfo)this.nodes.get(node1)).getNi(node2):-1;
-        //return (this.hasEdge(node1, node2)) ? edges.get(node2).get(node1) :  -1;
 
     }
 
+    /**
+     * adds a new node to the graph
+     */
     @Override
     public void addNode(int key) {
         this.nodes.putIfAbsent(key,new NodeInfo(key));
-        //this.edges.putIfAbsent(key, new Edges());
         this.mc++;
     }
 
+    /**
+     * creates new connection between nodes
+     * @param node1
+     * @param node2
+     * @param w weight of an edge
+     */
     @Override
     public void connect(int node1, int node2, double w) {
-        if (!hasEdge(node1,node2)&&w>=0&&node1!=node2) {
+        if (w>=0&&node1!=node2&&this.nodes.containsKey(node1)&&this.nodes.containsKey(node2)) {
             try{
-                if(!((NodeInfo)this.nodes.get(node1)).hasNi(node2)){
+                //checks if this is a new edge
+                if(!hasEdge(node1,node2)){
                     this.edgeCount++;
                 }
-//                if(!this.edges.get(node1).containsKey(node2)){
-//                    this.edgeCount++;
-//                }
-//                this.edges.get(node1).put(node2,w);
-//                this.edges.get(node2).put(node1,w);
                 ((NodeInfo)this.nodes.get(node1)).addNi(node2,w);
                 ((NodeInfo)this.nodes.get(node2)).addNi(node1,w);
                 this.mc++;
@@ -69,47 +92,65 @@ public class WGraph_DS implements weighted_graph{
         }
     }
 
+    /**
+     *
+     * @return all of the nodes in O(1)
+     */
     @Override
     public Collection<node_info> getV() {
         return this.nodes.values();
     }
 
+    /**
+     * gets all of the neighbors nodes
+     * @param node_id id of node
+     * @return
+     */
     @Override
     public Collection<node_info> getV(int node_id) {
+        List<node_info> connectedNodes = new ArrayList<>();
         try {
-            List<node_info> connectedNodes = new ArrayList<>();
+            //gets all of the connected nodes keys and gets their correlating nodes and puts them in a list
             ((NodeInfo)this.nodes.get(node_id)).getAllNi().keySet().forEach((key)->connectedNodes.add(nodes.get(key)));;
-            //edges.get(node_id).keySet().forEach((key)->connectedNodes.add(nodes.get(key)));
-            return  connectedNodes;
+            return connectedNodes;
         }catch (NullPointerException e){
-            return null;
+            return connectedNodes;
         }
     }
 
+    /**
+     * deletes specific node from graph
+     * and removes all of the edges associated with it
+     * @param key of node to remove
+     * @return the removed node
+     */
     @Override
     public node_info removeNode(int key) {
         node_info node = nodes.get(key);
         try{
-            //Collection<Integer> a  = edges.get(key).keySet();
-            Collection<Integer> a  = ((NodeInfo)node).getAllNi().keySet();
-            while(a.iterator().hasNext()){
-                removeEdge(a.iterator().next(),key);
+            Collection<Integer> niKeys  = ((NodeInfo)node).getAllNi().keySet();
+            //remove all connected edges
+            while(niKeys.iterator().hasNext()){
+                removeEdge(niKeys.iterator().next(),key);
             }
-            //this.edges.remove(key);
-            this.mc++;
+            //remove node from value list, and nodes
             nodes.remove(key);
+            this.mc++;
         }catch(Exception ignore){
         }
         return node;
     }
 
+    /**
+     * delete an edge from node
+     * @param node1
+     * @param node2
+     */
     @Override
     public void removeEdge(int node1, int node2) {
         if (hasEdge(node1, node2)){
             ((NodeInfo)this.nodes.get(node1)).removeNi(node2);
             ((NodeInfo)this.nodes.get(node2)).removeNi(node1);
-//            this.edges.get(node1).remove(node2);
-//            this.edges.get(node2).remove(node1);
             this.edgeCount--;
             this.mc++;
         }
@@ -135,10 +176,12 @@ public class WGraph_DS implements weighted_graph{
 
 
     private static class NodeInfo implements node_info {
+        //makes sure there are no repeating node keys
         private static int nodeCounter=0;
         private final Integer key;
         private String info;
         private double tag;
+        //holds all of the connections to the node and their weight
         private HashMap<Integer,Double> ni;
 
         public NodeInfo(int key){
@@ -173,6 +216,7 @@ public class WGraph_DS implements weighted_graph{
             return ni;
         }
 
+
         public double getNi(int key) {
             return ni.get(key);
         }
@@ -181,6 +225,12 @@ public class WGraph_DS implements weighted_graph{
             ni.remove(key);
         }
 
+        /**
+         * adds the node as neighbors
+         * then sends current node to be added as neighbors at the other node
+         * @param key node to add as neighbors
+         * @param dist the distance between the two nodes
+         */
         public void addNi(int key,double dist) {
             ni.put(key, dist);
         }

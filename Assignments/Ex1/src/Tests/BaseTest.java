@@ -51,6 +51,7 @@ public class BaseTest {
         }
     }
 
+
     public boolean compareGraph(weighted_graph g1, weighted_graph g2){
         if(g1.getV().size()!=g2.getV().size()) return false;
         for (int i = 0; i < g1.getV().size(); i++) {

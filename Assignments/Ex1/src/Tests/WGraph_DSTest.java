@@ -211,13 +211,13 @@ class WGraph_DSTest extends BaseTest{
     @Test
     void getMC() {
         graphCreator(1,10,10,1);
-        assertEquals(20,graph.getMC());
-        graph.removeEdge(0,5);
         assertEquals(21,graph.getMC());
-        graph.connect(0,5,1);
+        graph.removeEdge(0,5);
         assertEquals(22,graph.getMC());
+        graph.connect(0,5,1);
+        assertEquals(23,graph.getMC());
         graph.removeNode(0);
-        assertEquals(25,graph.getMC());
+        assertEquals(26,graph.getMC());
     }
 
 }
