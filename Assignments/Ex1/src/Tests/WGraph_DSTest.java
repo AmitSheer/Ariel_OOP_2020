@@ -1,10 +1,9 @@
 package Tests;
 
 import ex1.*;
-import ex1.WGraph_DS;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class WGraph_DSTest extends BaseTest{
@@ -107,35 +106,34 @@ class WGraph_DSTest extends BaseTest{
 
     @Test
     void GetAllConnectionToSpecificNode() {
-        graphCreator(1, 10, 10, 1);
+        graphCreator(1, 10, 0, 1);
+        graph.connect(0,5,1);
+        graph.connect(0,2,1);
         assertEquals(2,graph.getV(0).size());
-
-        for (node_info node_info : graph.getV(0)) {
-            if(node_info.getKey()!=5&&node_info.getKey()!=9) fail(graph.getV(0).toString());
-        }
-        assertEquals(3,graph.getV(1).size());
-        for (node_info node_info : graph.getV(1)) {
-            if(node_info.getKey()!=3&&node_info.getKey()!=7&&node_info.getKey()!=6)
-                fail(graph.getV(1).toString());
-        }
+        List<node_info> connections = (List<node_info>) graph.getV(0);
+        assertEquals(graph.getNode(5).toString(),connections.get(1).toString());
+        assertEquals(graph.getNode(2).toString(),connections.get(0).toString());
     }
 
     @Test
     void removeNode() {
         graphCreator(1, 10, 10, 1);
+        List<node_info> connections = (List<node_info>) graph.getV(0);
         graph.removeNode(0);
-        assertFalse(graph.hasEdge(0,5));
-        assertFalse(graph.hasEdge(0,9));
+        for (node_info node : connections) {
+            assertFalse(graph.hasEdge(0,node.getKey()));
+        }
         assertNull(graph.getNode(0));
-        assertEquals(8, graph.edgeSize());
+        assertEquals(7, graph.edgeSize());
+        assertEquals(9, graph.nodeSize());
+
     }
 
     @Test
     void removeFakeNode() {
         graphCreator(1, 10, 10, 1);
         graph.removeNode(19);
-        assertTrue(graph.hasEdge(0,5));
-        assertTrue(graph.hasEdge(0,9));
+        assertTrue(graph.hasEdge(0,7));
         assertNotNull(graph.getNode(0));
         assertEquals(10, graph.edgeSize());
     }
@@ -143,27 +141,27 @@ class WGraph_DSTest extends BaseTest{
     @Test
     void removeEdge() {
         graphCreator(1, 10, 10, 1);
-        assertTrue(graph.hasEdge(0,5));
-        graph.removeEdge(0,5);
-        assertFalse(graph.hasEdge(0,5));
+        assertTrue(graph.hasEdge(0,7));
+        graph.removeEdge(0,7);
+        assertFalse(graph.hasEdge(0,7));
         assertEquals(9, graph.edgeSize());
     }
 
     @Test
     void removeNotExistingEdge() {
         graphCreator(1, 10, 10, 1);
-        assertFalse(graph.hasEdge(0,7));
-        graph.removeEdge(0,7);
-        assertFalse(graph.hasEdge(0,7));
+        assertFalse(graph.hasEdge(0,5));
+        graph.removeEdge(0,5);
+        assertFalse(graph.hasEdge(0,5));
         assertEquals(10, graph.edgeSize());
     }
 
     @Test
     void removeNotExistingNodeEdge() {
         graphCreator(1, 10, 10, 1);
-        assertFalse(graph.hasEdge(0,7));
+        assertFalse(graph.hasEdge(0,5));
         graph.removeEdge(0,11);
-        assertFalse(graph.hasEdge(0,7));
+        assertFalse(graph.hasEdge(0,5));
         assertEquals(10, graph.edgeSize());
     }
 
@@ -196,7 +194,7 @@ class WGraph_DSTest extends BaseTest{
     void edgeSize() {
         graphCreator(1,10,10,1);
         assertEquals(10,graph.edgeSize());
-        graph.removeEdge(0,5);
+        graph.removeEdge(0,7);
         assertEquals(9,graph.edgeSize());
     }
 
@@ -211,13 +209,14 @@ class WGraph_DSTest extends BaseTest{
     @Test
     void getMC() {
         graphCreator(1,10,10,1);
+        assertEquals(20,graph.getMC());
+        graph.removeEdge(0,7);
         assertEquals(21,graph.getMC());
-        graph.removeEdge(0,5);
-        assertEquals(22,graph.getMC());
         graph.connect(0,5,1);
-        assertEquals(23,graph.getMC());
+        assertEquals(22,graph.getMC());
+        int mc = graph.getMC()+graph.getV(0).size()+1;
         graph.removeNode(0);
-        assertEquals(26,graph.getMC());
+        assertEquals(mc,graph.getMC());
     }
 
 }

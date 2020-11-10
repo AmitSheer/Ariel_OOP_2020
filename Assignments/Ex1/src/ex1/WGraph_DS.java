@@ -1,12 +1,13 @@
 package ex1;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class WGraph_DS implements weighted_graph{
+public class WGraph_DS implements weighted_graph,Serializable{
     //Holds the nodes in order to have access to the nodes in O(1)
     private final HashMap<Integer,node_info> nodes;
     //counts the number of edges
@@ -171,11 +172,16 @@ public class WGraph_DS implements weighted_graph{
         return this.mc;
     }
 
-    static class Edges extends HashMap<Integer,Double>{
+    @Override
+    public String toString() {
+        return "WGraph_DS{" +
+                "nodes=" + nodes.toString() +
+                ", edgeCount=" + edgeCount +
+                ", mc=" + mc +
+                '}';
     }
 
-
-    private static class NodeInfo implements node_info {
+    static class NodeInfo implements node_info, Serializable {
         //makes sure there are no repeating node keys
         private static int nodeCounter=0;
         private final Integer key;
@@ -262,10 +268,11 @@ public class WGraph_DS implements weighted_graph{
 
         @Override
         public String toString() {
-            return "{" +
-                    "key:" + key +
-                    ", info:'" + info + '\'' +
-                    ", tag:" + tag +
+            return "NodeInfo{" +
+                    "key=" + key +
+                    ", info='" + info + '\'' +
+                    ", tag=" + tag +
+                    ", ni=" + ni.toString() +
                     '}';
         }
     }

@@ -1,11 +1,5 @@
 package ex1;
 
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.*;
 import java.util.*;
 
@@ -59,6 +53,12 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return this.graph.nodeSize()==numberOfVisited;
     }
 
+    /**
+     *
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
         if (this.graph.getV().size() == 0 || this.graph.getNode(src) == null || this.graph.getNode(src) == null)
@@ -90,8 +90,10 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     public boolean save(String file) {
         try {
             if(!new File(file).createNewFile()) System.out.println("File with the same name exists, will write over the file");
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(new JsonGraphParser().parseGraph(this.graph).toJSONString());
+            FileOutputStream fileWriter = new FileOutputStream(file);
+            ObjectOutputStream outputStream  = new ObjectOutputStream(fileWriter);
+            outputStream.writeObject(this.graph);
+            outputStream.close();
             fileWriter.close();
             return true;
         } catch (IOException e) {
@@ -102,20 +104,15 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public boolean load(String file) {
-        File f = new File(file);
-        if(f.exists()){
-            try (FileReader reader = new FileReader(file)){
-                weighted_graph tempGraph = new JsonGraphParser().parseJsonToGraph(reader);
-                if(tempGraph == null)
-                    return false;
-                this.init(tempGraph);
-                reader.close();
-                return true;
-            } catch (ParseException | IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }else{
+        try {
+            FileInputStream reader = new FileInputStream(file);
+            ObjectInputStream inputStream = new ObjectInputStream(reader);
+            this.graph = (WGraph_DS)inputStream.readObject();
+            inputStream.close();
+            reader.close();
+            return true;
+        } catch (Exception e) {
+            //e.printStackTrace();
             return false;
         }
     }
