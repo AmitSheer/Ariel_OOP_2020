@@ -1,9 +1,11 @@
 package ex1;
 
 import java.io.*;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.*;
 
-public class WGraph_Algo implements weighted_graph_algorithms {
+public class WGraph_Algo extends BaseLogger implements weighted_graph_algorithms {
     private weighted_graph graph;
     private Dijkstra algo;
     public WGraph_Algo(){
@@ -11,11 +13,13 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     }
     @Override
     public void init(weighted_graph g) {
+        logger.log(Date.from(Instant.now())+" WGraph_Algo - init new graph value");
         this.graph = g;
     }
 
     @Override
     public weighted_graph getGraph() {
+        logger.log(Date.from(Instant.now())+" WGraph_Algo - return init graph value");
         return this.graph;
     }
 
@@ -27,6 +31,8 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     public weighted_graph copy() {
         weighted_graph copiedGraph = new WGraph_DS();
         //copy all nodes into new nodes, with new pointers
+        logger.log(Date.from(Instant.now())+" WGraph_Algo - started copied graph");
+
         for (node_info node : graph.getV()) {
             copiedGraph.addNode(node.getKey());
         }
@@ -38,6 +44,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
                 copiedGraph.connect(connectedNode.getKey(),nodeKey,graph.getEdge(nodeKey,connectedNode.getKey()));
             }
         }
+        logger.log(Date.from(Instant.now())+" WGraph_Algo - ended copied graph");
         return copiedGraph;
     }
 
@@ -50,6 +57,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         if(this.graph.getV().size()==0) return true;
         int numberOfVisited = this.algo.dijkstra(this.graph, this.graph.getV().stream().findFirst().get(), -1);
         resetGraph();
+        logger.log(Date.from(Instant.now())+" WGraph_Algo - checks if graph is connected: "+ (this.graph.nodeSize()==numberOfVisited));
         return this.graph.nodeSize()==numberOfVisited;
     }
 
@@ -61,15 +69,19 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      */
     @Override
     public double shortestPathDist(int src, int dest) {
-        if (this.graph.getV().size() == 0 || this.graph.getNode(src) == null || this.graph.getNode(src) == null)
+        if (this.graph.getV().size() == 0 || this.graph.getNode(src) == null || this.graph.getNode(src) == null) {
+            logger.log(Date.from(Instant.now()) + " WGraph_Algo - checks if shortestPathDist, one of the nodes not connected: " + src + "," + dest);
             return -1;
+        }
         this.algo.dijkstra(this.graph, graph.getNode(src), dest);
         if (this.graph.getNode(dest).getTag() == Integer.MAX_VALUE){
             resetGraph();
+            logger.log(Date.from(Instant.now())+" WGraph_Algo - checks if shortestPathDist, not even connected: "+src+","+dest);
             return -1;
         }else{
             double value = this.graph.getNode(dest).getTag();
             resetGraph();
+            logger.log(Date.from(Instant.now())+" WGraph_Algo - checks if shortestPathDist: node"+src+","+dest);
             return value;
         }
     }
