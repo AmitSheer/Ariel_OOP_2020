@@ -18,9 +18,9 @@ public class Performance extends BaseTest {
         Timestamp n1 = Timestamp.from(Instant.now());
         graphCreatorForPerformanceTests2(1,maxNodes,maxEdges,1 );
         Timestamp n2 = Timestamp.from(Instant.now());
-        assertTrue((n2.getTime()-n1.getTime())/1000.0<10.0);
         System.out.println("started on: "+n1);
         System.out.println("ended on: "+n2);
+        assertTrue((n2.getTime()-n1.getTime())/1000.0<10.0);
         System.out.println(graph.edgeSize());
         System.out.println(graph.nodeSize());
         System.out.println("Common Graph Creator");
