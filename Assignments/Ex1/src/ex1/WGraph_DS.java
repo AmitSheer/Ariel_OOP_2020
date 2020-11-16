@@ -2,6 +2,8 @@ package ex1;
 
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ public class WGraph_DS implements weighted_graph,Serializable{
     @Override
     public boolean hasEdge(int node1, int node2) {
         try{
-            return ((NodeInfo)this.nodes.get(node1)).hasNi(node2)&& ((NodeInfo)this.nodes.get(node2)).hasNi(node1);
+            return ((NodeInfo)this.nodes.get(node1)).hasNi(node2) && ((NodeInfo)this.nodes.get(node2)).hasNi(node1);
         }catch (NullPointerException e ){
             return false;
         }
@@ -58,7 +60,6 @@ public class WGraph_DS implements weighted_graph,Serializable{
     @Override
     public double getEdge(int node1, int node2) {
         return (this.hasEdge(node1,node2))?((NodeInfo)this.nodes.get(node1)).getNi(node2):-1;
-
     }
 
     /**
@@ -112,11 +113,12 @@ public class WGraph_DS implements weighted_graph,Serializable{
         List<node_info> connectedNodes = new ArrayList<>();
         try {
             //gets all of the connected nodes keys and gets their correlating nodes and puts them in a list
-            ((NodeInfo)this.nodes.get(node_id)).getAllNi().keySet().forEach((key)->connectedNodes.add(nodes.get(key)));;
+            ((NodeInfo)this.nodes.get(node_id)).getAllNi().keySet().forEach((key)->connectedNodes.add(nodes.get(key)));
             return connectedNodes;
         }catch (NullPointerException e){
             return connectedNodes;
         }
+
     }
 
     /**
