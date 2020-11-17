@@ -6,7 +6,6 @@ import java.sql.Date;
 import java.time.Instant;
 import java.util.*;
 
-
 public class WGraph_DS implements weighted_graph,Serializable{
     //Holds the nodes in order to have access to the nodes in O(1)
     private final HashMap<Integer,node_info> nodes;
@@ -58,7 +57,6 @@ public class WGraph_DS implements weighted_graph,Serializable{
     @Override
     public double getEdge(int node1, int node2) {
         return (this.hasEdge(node1,node2))?((NodeInfo)this.nodes.get(node1)).getNi(node2):-1;
-
     }
 
     /**
