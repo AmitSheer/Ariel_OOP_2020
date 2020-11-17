@@ -147,7 +147,7 @@ class WGraph_AlgoTest extends BaseTest {
         }
         algo.init(graph);
         assertTrue(algo.load(path+"/testFile.json"));
-        assertTrue(compareGraph(graph, algo.getGraph()));
+        assertEquals(graph, algo.getGraph());
     }
 
     @Test
@@ -186,6 +186,6 @@ class WGraph_AlgoTest extends BaseTest {
         }
         algo.init(graph);
         assertTrue(algo.load(path+"/testFile.txt"));
-        assertTrue(compareGraph(graph, algo.getGraph()));
+        assertEquals(graph, algo.getGraph());
     }
 }

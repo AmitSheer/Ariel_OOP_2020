@@ -4,12 +4,10 @@ package ex1;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable{
+
+public class WGraph_DS implements weighted_graph,Serializable{
     //Holds the nodes in order to have access to the nodes in O(1)
     private final HashMap<Integer,node_info> nodes;
     //counts the number of edges
@@ -24,7 +22,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
         this.nodes = new HashMap<>();
         this.edgeCount=0;
         this.mc = 0;
-        logger.log(Date.from(Instant.now())+" - new instance of WGraph_DS");
     }
 
     /**
@@ -34,7 +31,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
      */
     @Override
     public node_info getNode(int key) {
-        logger.log(Date.from(Instant.now())+" - getNode from graph");
         return this.nodes.get(key);
     }
 
@@ -50,8 +46,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
             return ((NodeInfo)this.nodes.get(node1)).hasNi(node2) && ((NodeInfo)this.nodes.get(node2)).hasNi(node1);
         }catch (NullPointerException e ){
             return false;
-        }finally {
-            logger.log(Date.from(Instant.now())+" - Checks edges existence:"+node1+","+node2);
         }
     }
 
@@ -63,7 +57,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
      */
     @Override
     public double getEdge(int node1, int node2) {
-        logger.log(Date.from(Instant.now())+" - gets edge value:"+node1+","+node2);
         return (this.hasEdge(node1,node2))?((NodeInfo)this.nodes.get(node1)).getNi(node2):-1;
 
     }
@@ -73,7 +66,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
      */
     @Override
     public void addNode(int key) {
-        logger.log(Date.from(Instant.now())+" - adds new node:"+key);
         this.nodes.putIfAbsent(key,new NodeInfo(key));
         this.mc++;
     }
@@ -91,13 +83,14 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
                 //checks if this is a new edge
                 if(!hasEdge(node1,node2)){
                     this.edgeCount++;
-                    logger.log(Date.from(Instant.now())+" - adds new edge:"+node1+","+node2+" with weight:"+w);
-                }else {
-                    logger.log(Date.from(Instant.now())+" - overrides existing edge distance value edge:"+node1+","+node2+" with weight:"+w);
+                    this.mc++;
+                    ((NodeInfo)this.nodes.get(node1)).addNi(node2,w);
+                    ((NodeInfo)this.nodes.get(node2)).addNi(node1,w);
+                }else if (getEdge(node1,node2)!=w) {
+                    this.mc++;
+                    ((NodeInfo)this.nodes.get(node1)).addNi(node2,w);
+                    ((NodeInfo)this.nodes.get(node2)).addNi(node1,w);
                 }
-                ((NodeInfo)this.nodes.get(node1)).addNi(node2,w);
-                ((NodeInfo)this.nodes.get(node2)).addNi(node1,w);
-                this.mc++;
             }catch(NullPointerException ignored){
 
             }
@@ -110,7 +103,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
      */
     @Override
     public Collection<node_info> getV() {
-        logger.log(Date.from(Instant.now())+" - got all nodes");
         return this.nodes.values();
     }
 
@@ -128,8 +120,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
             return connectedNodes;
         }catch (NullPointerException e){
             return connectedNodes;
-        }finally {
-            logger.log(Date.from(Instant.now())+" - get all connections to node("+node_id+":"+connectedNodes.toString());
         }
 
     }
@@ -151,7 +141,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
             }
             //remove node from value list, and nodes
             nodes.remove(key);
-            logger.log(Date.from(Instant.now())+" - removed node from graph:"+key);
             this.mc++;
         }catch(Exception ignore){
         }
@@ -166,7 +155,6 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
     @Override
     public void removeEdge(int node1, int node2) {
         if (hasEdge(node1, node2)){
-            logger.log(Date.from(Instant.now())+" - removed edge from:"+node1+","+node2);
             ((NodeInfo)this.nodes.get(node1)).removeNi(node2);
             ((NodeInfo)this.nodes.get(node2)).removeNi(node1);
             this.edgeCount--;
@@ -196,6 +184,18 @@ public class WGraph_DS extends BaseLogger implements weighted_graph,Serializable
                 ", edgeCount=" + edgeCount +
                 ", mc=" + mc +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return o.toString().equals(this.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nodes, edgeCount, mc);
     }
 
     static class NodeInfo implements node_info, Serializable {
